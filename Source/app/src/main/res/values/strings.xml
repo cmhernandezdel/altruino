@@ -1,3 +1,7 @@
 <resources>
-    <string name="app_name">Altruino</string>
+    <string name="app_name" translatable="false">Altruino</string>
+    <string name="button_up_label">Forward</string>
+    <string name="button_down_label">Backwards</string>
+    <string name="button_left_label">Turn left</string>
+    <string name="button_right_label">Turn right</string>
 </resources>
