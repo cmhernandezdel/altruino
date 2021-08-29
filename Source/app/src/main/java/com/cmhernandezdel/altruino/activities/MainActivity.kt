@@ -4,12 +4,14 @@ import android.app.Activity
 import android.os.Bundle
 import android.widget.Button
 import com.cmhernandezdel.altruino.R
+import com.cmhernandezdel.altruino.modules.BluetoothModule
 
 class MainActivity : Activity() {
     var buttonUp: Button? = null
     var buttonDown: Button? = null
     var buttonLeft: Button? = null
     var buttonRight: Button? = null
+    var bluetoothModule: BluetoothModule? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
