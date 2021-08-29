@@ -31,4 +31,17 @@ class BluetoothModule {
             return@async true
         }
     }
+
+    fun sendSignalAsync(signal: String): Deferred<Boolean> = coroutineScope.async {
+        bluetoothSocket?.let { socket ->
+            try {
+                socket.outputStream.write(signal.encodeToByteArray())
+                return@async true
+            } catch (e: IOException) {
+                return@async false
+            }
+        } ?: run {
+            return@async false
+        }
+    }
 }
