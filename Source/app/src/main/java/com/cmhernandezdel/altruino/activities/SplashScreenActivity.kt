@@ -16,7 +16,7 @@ class SplashScreenActivity : AppCompatActivity() {
         setContentView(R.layout.activity_splash_screen)
 
         handler.postDelayed({
-            val homeIntent = Intent(this, MainActivity::class.java)
+            val homeIntent = Intent(this, DeviceListActivity::class.java)
             startActivity(homeIntent)
             finish()
         }, delayInMilliseconds)
