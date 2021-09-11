@@ -11,4 +11,8 @@
     <string name="bluetooth_disabled_info">Bluetooth is disabled</string>
     <string name="bluetooth_enable_button">Enable bluetooth</string>
     <string name="bluetooth_enabled_info">Bluetooth is enabled, go to "available" tab</string>
+
+    <string name="view_pager_title_status">Status</string>
+    <string name="view_pager_title_available">Available</string>
+    <string name="view_pager_title_bonded">Bonded</string>
 </resources>

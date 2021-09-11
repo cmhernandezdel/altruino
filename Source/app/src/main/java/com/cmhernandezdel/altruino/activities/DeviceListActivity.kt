@@ -9,6 +9,7 @@ import android.widget.ListView
 import android.widget.TextView
 import androidx.viewpager.widget.ViewPager
 import com.cmhernandezdel.altruino.R
+import com.cmhernandezdel.altruino.adapters.DeviceListActivityPagerAdapter
 import com.google.android.material.tabs.TabLayout
 
 // to pair: 1234
@@ -19,8 +20,10 @@ class DeviceListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device_list)
 
+        val pagerAdapter = DeviceListActivityPagerAdapter(supportFragmentManager, applicationContext)
         val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
         val viewPager = findViewById<ViewPager>(R.id.pager)
+        viewPager.adapter = pagerAdapter
         tabLayout.setupWithViewPager(viewPager)
 
         /*
