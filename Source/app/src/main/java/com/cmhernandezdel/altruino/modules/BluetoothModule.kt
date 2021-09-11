@@ -12,6 +12,15 @@ class BluetoothModule {
     private var bluetoothAdapter: BluetoothAdapter? = null
     private var bluetoothSocket: BluetoothSocket? = null
 
+    fun isBluetoothEnabled(): Boolean {
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+        if (bluetoothAdapter == null) {
+            return false
+        } else {
+            return bluetoothAdapter!!.isEnabled
+        }
+    }
+
     fun connectToBluetoothAsync(address: String): Deferred<Boolean> = coroutineScope.async {
         if (bluetoothSocket == null) {
             try {
