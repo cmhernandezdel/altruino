@@ -8,4 +8,7 @@
     <string name="select_device_title">Select a device</string>
 
     <string name="device_list_title">Available bluetooth devices</string>
+    <string name="bluetooth_disabled_info">Bluetooth is disabled</string>
+    <string name="bluetooth_enable_button">Enable bluetooth</string>
+    <string name="bluetooth_enabled_info">Bluetooth is enabled, go to "available" tab</string>
 </resources>

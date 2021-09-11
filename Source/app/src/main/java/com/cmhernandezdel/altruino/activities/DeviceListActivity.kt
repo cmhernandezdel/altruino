@@ -7,7 +7,9 @@ import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.ListView
 import android.widget.TextView
+import androidx.viewpager.widget.ViewPager
 import com.cmhernandezdel.altruino.R
+import com.google.android.material.tabs.TabLayout
 
 // to pair: 1234
 // 9600 bps
@@ -17,13 +19,17 @@ class DeviceListActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_device_list)
 
+        val tabLayout = findViewById<TabLayout>(R.id.tab_layout)
+        val viewPager = findViewById<ViewPager>(R.id.pager)
+        tabLayout.setupWithViewPager(viewPager)
+
+        /*
         val deviceListView = findViewById<ListView>(R.id.bluetooth_devices_list)
-
         val list = ArrayList<String>()
-
-        val adapter = ArrayAdapter(this, R.layout.bluetooth_list_item, list)
+        val adapter = ArrayAdapter(this, android.R.layout.simple_list_item_1, list)
         deviceListView.adapter = adapter
         deviceListView.onItemClickListener = onDeviceClicked
+        */
     }
 
     private val onDeviceClicked = AdapterView.OnItemClickListener { _, view, _, _ ->
