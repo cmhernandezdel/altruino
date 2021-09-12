@@ -7,6 +7,7 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
 import com.cmhernandezdel.altruino.R
@@ -30,6 +31,10 @@ class BluetoothStatusFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        val buttonEnableBluetooth = view.findViewById<Button>(R.id.button_enable_bluetooth)
+        buttonEnableBluetooth.setOnClickListener { onEnableBluetoothButtonClick() }
+
         if (isBluetoothPermissionGranted() && bluetoothModule.isBluetoothEnabled()) {
             loadBluetoothEnabledUI()
         } else if (!isBluetoothPermissionGranted()) {
@@ -86,6 +91,12 @@ class BluetoothStatusFragment : Fragment() {
             ) == PackageManager.PERMISSION_GRANTED
         }
         return false
+    }
+
+    private fun onEnableBluetoothButtonClick() {
+        if (bluetoothModule.enableBluetooth()) {
+            loadBluetoothEnabledUI()
+        }
     }
 
 }

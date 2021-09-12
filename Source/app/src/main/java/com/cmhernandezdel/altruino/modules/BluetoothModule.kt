@@ -8,9 +8,17 @@ import java.util.*
 
 class BluetoothModule {
     private val coroutineScope = CoroutineScope(Dispatchers.IO)
-    private val bluetoothUUID = UUID.fromString("") // TODO
+    private val bluetoothUUID = UUID.fromString("e568e2da-c7e1-4d84-8c35-fdd14307fbd1")
     private var bluetoothAdapter: BluetoothAdapter? = null
     private var bluetoothSocket: BluetoothSocket? = null
+
+    fun enableBluetooth(): Boolean {
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+        bluetoothAdapter?.let {
+            return it.enable()
+        }
+        return false
+    }
 
     fun isBluetoothEnabled(): Boolean {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
