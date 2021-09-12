@@ -32,6 +32,15 @@ class BluetoothModule(private val context: Context) {
     private var bluetoothAdapter: BluetoothAdapter? = null
     private var bluetoothSocket: BluetoothSocket? = null
 
+    fun getBondedDevices(): ArrayList<BluetoothDevice> {
+        val retList = ArrayList<BluetoothDevice>()
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+        bluetoothAdapter?.let {
+            retList.addAll(it.bondedDevices)
+        }
+        return retList
+    }
+
     fun startDiscovery() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         bluetoothAdapter?.let {
