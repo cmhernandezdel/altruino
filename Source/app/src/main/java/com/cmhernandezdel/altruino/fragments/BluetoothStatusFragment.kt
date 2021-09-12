@@ -14,7 +14,7 @@ import com.cmhernandezdel.altruino.R
 import com.cmhernandezdel.altruino.modules.BluetoothModule
 
 class BluetoothStatusFragment : Fragment() {
-    private val bluetoothModule: BluetoothModule = BluetoothModule()
+    private var bluetoothModule: BluetoothModule? = null
     private var llBluetoothEnabled: LinearLayout? = null
     private var llBluetoothDisabled: LinearLayout? = null
 
@@ -35,7 +35,9 @@ class BluetoothStatusFragment : Fragment() {
         val buttonEnableBluetooth = view.findViewById<Button>(R.id.button_enable_bluetooth)
         buttonEnableBluetooth.setOnClickListener { onEnableBluetoothButtonClick() }
 
-        if (isBluetoothPermissionGranted() && bluetoothModule.isBluetoothEnabled()) {
+        bluetoothModule = BluetoothModule(requireContext())
+
+        if (isBluetoothPermissionGranted() && bluetoothModule != null && bluetoothModule!!.isBluetoothEnabled()) {
             loadBluetoothEnabledUI()
         } else if (!isBluetoothPermissionGranted()) {
             requestPermissions(
@@ -94,7 +96,7 @@ class BluetoothStatusFragment : Fragment() {
     }
 
     private fun onEnableBluetoothButtonClick() {
-        if (bluetoothModule.enableBluetooth()) {
+        if (bluetoothModule != null && bluetoothModule!!.enableBluetooth()) {
             loadBluetoothEnabledUI()
         }
     }
