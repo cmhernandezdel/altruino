@@ -16,7 +16,7 @@ class BluetoothDevicesListAdapter(context: Context, devices: ArrayList<Bluetooth
         device?.let {
             val textViewName = retView.findViewById<TextView>(R.id.bluetooth_device_item_name)
             val textViewAddress = retView.findViewById<TextView>(R.id.bluetooth_device_item_address)
-            textViewName.text = device.name
+            textViewName.text = device.name ?: "Unknown device"
             textViewAddress.text = device.address
         }
         return retView

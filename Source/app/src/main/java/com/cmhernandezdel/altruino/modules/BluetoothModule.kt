@@ -7,21 +7,32 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
+import android.util.Log
+import com.cmhernandezdel.altruino.adapters.BluetoothDevicesListAdapter
 import kotlinx.coroutines.*
 import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 
 class BluetoothModule(private val context: Context) {
+    private val classTag = "BluetoothModule.kt"
+
     // DISCOVERY
     val availableDevices = ArrayList<BluetoothDevice>()
     private val discoveryReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
                 BluetoothDevice.ACTION_FOUND -> {
-                    val device =
-                        intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-                    availableDevices.add(device!!)
+                    val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+                    if(!availableDevices.contains(device!!)) availableDevices.add(device)
+                    adapter.notifyDataSetChanged()
+                    Log.i(classTag, "Found device ${device.name}")
+                }
+                BluetoothAdapter.ACTION_DISCOVERY_STARTED -> {
+                    Log.i(classTag, "Discovery started")
+                }
+                BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
+                    Log.i(classTag, "Discovery finished")
                 }
             }
         }
@@ -31,6 +42,8 @@ class BluetoothModule(private val context: Context) {
     private val bluetoothUUID = UUID.fromString("e568e2da-c7e1-4d84-8c35-fdd14307fbd1")
     private var bluetoothAdapter: BluetoothAdapter? = null
     private var bluetoothSocket: BluetoothSocket? = null
+
+    val adapter = BluetoothDevicesListAdapter(context, availableDevices)
 
     fun getBondedDevices(): ArrayList<BluetoothDevice> {
         val retList = ArrayList<BluetoothDevice>()
@@ -44,8 +57,13 @@ class BluetoothModule(private val context: Context) {
     fun startDiscovery() {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         bluetoothAdapter?.let {
+            Log.i(classTag, "Starting discovery of bluetooth devices...")
+            if (it.isDiscovering) it.cancelDiscovery()
             it.startDiscovery()
-            val filter = IntentFilter(BluetoothDevice.ACTION_FOUND)
+            val filter = IntentFilter()
+            filter.addAction(BluetoothDevice.ACTION_FOUND)
+            filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
+            filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
             context.registerReceiver(discoveryReceiver, filter)
         }
     }

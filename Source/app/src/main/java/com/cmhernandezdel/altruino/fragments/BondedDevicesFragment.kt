@@ -14,7 +14,7 @@ class BondedDevicesFragment : Fragment() {
     private var bluetoothModule: BluetoothModule? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val retView = inflater.inflate(R.layout.fragment_available_devices, container, false)
+        val retView = inflater.inflate(R.layout.fragment_bonded_devices, container, false)
         bluetoothModule = BluetoothModule(requireContext())
         bluetoothModule?.let {
             val adapter = BluetoothDevicesListAdapter(requireContext(), it.getBondedDevices())

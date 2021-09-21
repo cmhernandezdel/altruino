@@ -1,6 +1,8 @@
 package com.cmhernandezdel.altruino.fragments
 
+import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -11,17 +13,23 @@ import com.cmhernandezdel.altruino.adapters.BluetoothDevicesListAdapter
 import com.cmhernandezdel.altruino.modules.BluetoothModule
 
 class AvailableDevicesFragment : Fragment() {
+    private val classTag = "AvailableDevicesFragment.kt"
     private var bluetoothModule: BluetoothModule? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+        Log.d(classTag, "Fragment view created")
         val retView = inflater.inflate(R.layout.fragment_available_devices, container, false)
         bluetoothModule = BluetoothModule(requireContext())
         bluetoothModule?.let {
-            val adapter = BluetoothDevicesListAdapter(requireContext(), it.availableDevices)
             val listView = retView.findViewById<ListView>(R.id.lv_available_devices)
-            listView.adapter = adapter
-            it.startDiscovery()
+            listView.adapter = it.adapter
         }
         return retView
+    }
+
+    override fun onResume() {
+        super.onResume()
+        Log.d(classTag, "Fragment resumed")
+        bluetoothModule?.startDiscovery()
     }
 }
