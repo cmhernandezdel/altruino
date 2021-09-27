@@ -24,7 +24,7 @@ class BluetoothModule(private val context: Context) {
             when (intent?.action) {
                 BluetoothDevice.ACTION_FOUND -> {
                     val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-                    if(!availableDevices.contains(device!!)) availableDevices.add(device)
+                    if (!availableDevices.contains(device!!)) availableDevices.add(device)
                     adapter.notifyDataSetChanged()
                     Log.i(classTag, "Found device ${device.name}")
                 }
@@ -33,6 +33,12 @@ class BluetoothModule(private val context: Context) {
                 }
                 BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
                     Log.i(classTag, "Discovery finished")
+                }
+                BluetoothDevice.ACTION_BOND_STATE_CHANGED -> {
+                    val newBondState = intent.getIntExtra(BluetoothDevice.ACTION_BOND_STATE_CHANGED, BluetoothDevice.BOND_NONE)
+                    if (newBondState == BluetoothDevice.BOND_BONDED) {
+                        Log.i(classTag, "Successfully bonded to device")
+                    }
                 }
             }
         }
@@ -66,6 +72,11 @@ class BluetoothModule(private val context: Context) {
             filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
             context.registerReceiver(discoveryReceiver, filter)
         }
+    }
+
+    fun stopDiscovery() {
+        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
+        bluetoothAdapter?.cancelDiscovery()
     }
 
     fun enableBluetooth(): Boolean {
@@ -118,5 +129,9 @@ class BluetoothModule(private val context: Context) {
         } ?: run {
             return@async false
         }
+    }
+
+    fun bondToDevice(device: BluetoothDevice) {
+        device.createBond()
     }
 }

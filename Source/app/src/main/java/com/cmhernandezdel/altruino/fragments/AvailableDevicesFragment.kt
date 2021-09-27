@@ -27,6 +27,8 @@ class AvailableDevicesFragment : Fragment() {
             listView.onItemClickListener = AdapterView.OnItemClickListener {
                     _, _, position, _ ->
                 val bluetoothDevice = it.availableDevices[position]
+                Log.d(classTag, "Connecting to bluetooth device ${bluetoothDevice.name}")
+                it.stopDiscovery()
                 bluetoothDevice.createBond()
             }
         }
