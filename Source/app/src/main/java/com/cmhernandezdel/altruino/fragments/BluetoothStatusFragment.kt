@@ -3,6 +3,7 @@ package com.cmhernandezdel.altruino.fragments
 import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -14,26 +15,23 @@ import com.cmhernandezdel.altruino.R
 import com.cmhernandezdel.altruino.modules.BluetoothModule
 
 class BluetoothStatusFragment : Fragment() {
+    private val classTag = "BluetoothStatusFragment.kt"
     private var bluetoothModule: BluetoothModule? = null
     private var llBluetoothEnabled: LinearLayout? = null
     private var llBluetoothDisabled: LinearLayout? = null
 
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        llBluetoothEnabled = view?.findViewById(R.id.ll_enabled_bluetooth)
-        llBluetoothDisabled = view?.findViewById(R.id.ll_disabled_bluetooth)
+    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_bluetooth_status, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        llBluetoothEnabled = view.findViewById(R.id.ll_enabled_bluetooth)
+        llBluetoothDisabled = view.findViewById(R.id.ll_disabled_bluetooth)
+
         val buttonEnableBluetooth = view.findViewById<Button>(R.id.button_enable_bluetooth)
-        buttonEnableBluetooth.setOnClickListener { onEnableBluetoothButtonClick() }
+        buttonEnableBluetooth?.setOnClickListener { onEnableBluetoothButtonClick() }
 
         bluetoothModule = BluetoothModule(requireContext())
 
@@ -72,25 +70,23 @@ class BluetoothStatusFragment : Fragment() {
     }
 
     private fun loadBluetoothDisabledUI() {
+        Log.i(classTag, "Loading bluetooth disabled UI")
         llBluetoothEnabled?.visibility = View.GONE
         llBluetoothDisabled?.visibility = View.VISIBLE
     }
 
     private fun loadBluetoothEnabledUI() {
+        Log.i(classTag, "Loading bluetooth enabled UI")
         llBluetoothDisabled?.visibility = View.GONE
         llBluetoothEnabled?.visibility = View.VISIBLE
     }
 
     private fun isBluetoothPermissionGranted(): Boolean {
         context?.let {
-            return ContextCompat.checkSelfPermission(
-                it,
-                Manifest.permission.BLUETOOTH
-            ) == PackageManager.PERMISSION_GRANTED
-                    && ContextCompat.checkSelfPermission(
-                it,
-                Manifest.permission.BLUETOOTH_ADMIN
-            ) == PackageManager.PERMISSION_GRANTED
+            val bluetoothPermissionGranted = ContextCompat.checkSelfPermission(it, Manifest.permission.BLUETOOTH) == PackageManager.PERMISSION_GRANTED
+            val bluetoothAdminPermissionGranted = ContextCompat.checkSelfPermission(it, Manifest.permission.BLUETOOTH_ADMIN) == PackageManager.PERMISSION_GRANTED
+            Log.i(classTag, "Permissions granted: BT: $bluetoothPermissionGranted, BT ADMIN: $bluetoothAdminPermissionGranted")
+            return bluetoothPermissionGranted && bluetoothAdminPermissionGranted
         }
         return false
     }

@@ -79,8 +79,10 @@ class BluetoothModule(private val context: Context) {
     fun isBluetoothEnabled(): Boolean {
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         if (bluetoothAdapter == null) {
+            Log.i(classTag, "Bluetooth adapter is null")
             return false
         } else {
+            Log.i(classTag, "Bluetooth adapter is not null")
             return bluetoothAdapter!!.isEnabled
         }
     }
