@@ -20,6 +20,7 @@ class SplashScreenActivity : AppCompatActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_splash_screen)
 
+        /*
         if (android.os.Build.VERSION.SDK_INT < android.os.Build.VERSION_CODES.Q) {
             val buffer = ByteArray(10)
             val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
@@ -37,11 +38,16 @@ class SplashScreenActivity : AppCompatActivity() {
             }
 
         } else {
-            handler.postDelayed({
-                val homeIntent = Intent(this, DeviceListActivity::class.java)
-                startActivity(homeIntent)
-                finish()
-            }, delayInMilliseconds)
+
+         */
+        handler.postDelayed({
+            val homeIntent = Intent(this, DeviceListActivity::class.java)
+            startActivity(homeIntent)
+            finish()
+        }, delayInMilliseconds)
+        /*
         }
+        
+         */
     }
 }
