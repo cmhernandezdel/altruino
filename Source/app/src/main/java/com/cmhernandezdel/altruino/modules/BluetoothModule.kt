@@ -1,5 +1,6 @@
 package com.cmhernandezdel.altruino.modules
 
+import android.annotation.SuppressLint
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothSocket
@@ -14,7 +15,8 @@ import java.io.IOException
 import java.util.*
 import kotlin.collections.ArrayList
 
-class BluetoothModule(private val context: Context) {
+@SuppressLint("StaticFieldLeak")
+object BluetoothModule {
     private val classTag = "BluetoothModule.kt"
 
     // DISCOVERY
@@ -25,7 +27,7 @@ class BluetoothModule(private val context: Context) {
                 BluetoothDevice.ACTION_FOUND -> {
                     val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
                     if (!availableDevices.contains(device!!)) availableDevices.add(device)
-                    adapter.notifyDataSetChanged()
+                    adapter!!.notifyDataSetChanged()
                     Log.i(classTag, "Found device ${device.name}")
                 }
                 BluetoothAdapter.ACTION_DISCOVERY_STARTED -> {
@@ -43,12 +45,16 @@ class BluetoothModule(private val context: Context) {
             }
         }
     }
-    
+
     private val bluetoothUUID = UUID.fromString("e568e2da-c7e1-4d84-8c35-fdd14307fbd1")
     private var bluetoothAdapter: BluetoothAdapter? = null
     private var bluetoothSocket: BluetoothSocket? = null
+    var adapter: BluetoothDevicesListAdapter? = null
+    private var context: Context? = null
 
-    val adapter = BluetoothDevicesListAdapter(context, availableDevices)
+    fun setContext(context: Context) {
+        this.context = context
+    }
 
     fun getBondedDevices(): ArrayList<BluetoothDevice> {
         val retList = ArrayList<BluetoothDevice>()
@@ -69,7 +75,7 @@ class BluetoothModule(private val context: Context) {
             filter.addAction(BluetoothDevice.ACTION_FOUND)
             filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
             filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
-            context.registerReceiver(discoveryReceiver, filter)
+            context!!.registerReceiver(discoveryReceiver, filter)
         }
     }
 
@@ -121,11 +127,14 @@ class BluetoothModule(private val context: Context) {
         bluetoothSocket?.let { socket ->
             try {
                 socket.outputStream.write(signal.encodeToByteArray())
+                Log.i(classTag, "Successfully sent signal: $signal to device")
                 return@withContext true
             } catch (e: IOException) {
+                Log.w(classTag, "Exception while writing signal: ${e.message}")
                 return@withContext false
             }
         } ?: run {
+            Log.w(classTag, "Bluetooth socket is null in sendSignalAsync")
             return@withContext false
         }
     }

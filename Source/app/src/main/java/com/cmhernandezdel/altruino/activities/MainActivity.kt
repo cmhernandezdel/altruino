@@ -14,16 +14,18 @@ class MainActivity : Activity() {
     private val downSignal = "2"
     private val leftSignal = "1"
     private val rightSignal = "3"
+    private val bluetoothModule = BluetoothModule
 
     var buttonUp: Button? = null
     var buttonDown: Button? = null
     var buttonLeft: Button? = null
     var buttonRight: Button? = null
-    var bluetoothModule: BluetoothModule? = null
     var coroutineScope: CoroutineScope = CoroutineScope(Dispatchers.IO)
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+
         buttonUp = findViewById(R.id.button_up)
         buttonDown = findViewById(R.id.button_down)
         buttonLeft = findViewById(R.id.button_left)
@@ -33,6 +35,8 @@ class MainActivity : Activity() {
         buttonDown?.setOnClickListener { onDownButtonClick() }
         buttonLeft?.setOnClickListener { onLeftButtonClick() }
         buttonRight?.setOnClickListener { onRightButtonClick() }
+
+        bluetoothModule.setContext(this)
     }
 
     private fun onUpButtonClick() = coroutineScope.launch {

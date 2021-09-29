@@ -17,24 +17,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class BondedDevicesFragment : Fragment() {
-    private var bluetoothModule: BluetoothModule? = null
+    private val bluetoothModule = BluetoothModule
     private val scope = CoroutineScope(Dispatchers.Main)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val retView = inflater.inflate(R.layout.fragment_bonded_devices, container, false)
-        bluetoothModule = BluetoothModule(requireContext())
-        bluetoothModule?.let {
-            val bondedDevices = it.getBondedDevices()
-            val adapter = BluetoothDevicesListAdapter(requireContext(), bondedDevices)
-            val listView = retView.findViewById<ListView>(R.id.lv_bonded_devices)
-            listView.adapter = adapter
-            listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
-                scope.launch {
-                    val success = it.connectToBluetoothAsync(bondedDevices[position])
-                    if (success) {
-                        val intent = Intent(requireContext(), MainActivity::class.java)
-                        startActivity(intent)
-                    }
+        val bondedDevices = bluetoothModule.getBondedDevices()
+        val adapter = BluetoothDevicesListAdapter(requireContext(), bondedDevices)
+        val listView = retView.findViewById<ListView>(R.id.lv_bonded_devices)
+        listView.adapter = adapter
+        listView.onItemClickListener = AdapterView.OnItemClickListener { _, _, position, _ ->
+            scope.launch {
+                val success = bluetoothModule.connectToBluetoothAsync(bondedDevices[position])
+                if (success) {
+                    val intent = Intent(requireContext(), MainActivity::class.java)
+                    startActivity(intent)
                 }
             }
         }
