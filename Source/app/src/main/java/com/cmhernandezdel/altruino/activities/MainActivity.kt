@@ -37,25 +37,25 @@ class MainActivity : Activity() {
 
     private fun onUpButtonClick() = coroutineScope.launch {
         bluetoothModule?.let { module ->
-            val success = module.sendSignalAsync(upSignal).await()
+            val success = module.sendSignalAsync(upSignal)
         }
     }
 
     private fun onDownButtonClick() = coroutineScope.launch {
         bluetoothModule?.let { module ->
-            val success = module.sendSignalAsync(downSignal).await()
+            val success = module.sendSignalAsync(downSignal)
         }
     }
 
     private fun onLeftButtonClick() = coroutineScope.launch {
         bluetoothModule?.let { module ->
-            val success = module.sendSignalAsync(leftSignal).await()
+            val success = module.sendSignalAsync(leftSignal)
         }
     }
 
     private fun onRightButtonClick() = coroutineScope.launch {
         bluetoothModule?.let { module ->
-            val success = module.sendSignalAsync(rightSignal).await()
+            val success = module.sendSignalAsync(rightSignal)
         }
     }
 }

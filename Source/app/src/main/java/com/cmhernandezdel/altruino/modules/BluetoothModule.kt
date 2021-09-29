@@ -43,8 +43,7 @@ class BluetoothModule(private val context: Context) {
             }
         }
     }
-
-    private val coroutineScope = CoroutineScope(Dispatchers.IO)
+    
     private val bluetoothUUID = UUID.fromString("e568e2da-c7e1-4d84-8c35-fdd14307fbd1")
     private var bluetoothAdapter: BluetoothAdapter? = null
     private var bluetoothSocket: BluetoothSocket? = null
@@ -118,20 +117,16 @@ class BluetoothModule(private val context: Context) {
         }
     }
 
-    fun sendSignalAsync(signal: String): Deferred<Boolean> = coroutineScope.async {
+    suspend fun sendSignalAsync(signal: String): Boolean = withContext(Dispatchers.IO) {
         bluetoothSocket?.let { socket ->
             try {
                 socket.outputStream.write(signal.encodeToByteArray())
-                return@async true
+                return@withContext true
             } catch (e: IOException) {
-                return@async false
+                return@withContext false
             }
         } ?: run {
-            return@async false
+            return@withContext false
         }
-    }
-
-    fun bondToDevice(device: BluetoothDevice) {
-        device.createBond()
     }
 }
