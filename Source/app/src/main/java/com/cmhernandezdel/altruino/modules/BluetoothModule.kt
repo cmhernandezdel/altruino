@@ -98,23 +98,23 @@ class BluetoothModule(private val context: Context) {
         }
     }
 
-    fun connectToBluetoothAsync(address: String): Deferred<Boolean> = coroutineScope.async {
+    suspend fun connectToBluetoothAsync(device: BluetoothDevice): Boolean = withContext(Dispatchers.IO) {
         if (bluetoothSocket == null) {
             try {
                 bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
                 bluetoothAdapter?.let { adapter ->
-                    val device = adapter.getRemoteDevice(address)
-                    bluetoothSocket =
-                        device.createInsecureRfcommSocketToServiceRecord(bluetoothUUID)
                     adapter.cancelDiscovery()
+                    bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(bluetoothUUID)
                     bluetoothSocket?.connect()
-                }
-                return@async true
+                    return@withContext true
+                } ?: Log.w(classTag, "Bluetooth adapter is null in connectToBluetoothAsync")
+                return@withContext false
             } catch (e: IOException) {
-                return@async false
+                Log.w(classTag, "Exception connecting to bluetooth: ${e.message}")
+                return@withContext false
             }
         } else {
-            return@async true
+            return@withContext true
         }
     }
 
