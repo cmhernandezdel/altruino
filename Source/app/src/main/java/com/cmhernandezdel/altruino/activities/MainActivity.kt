@@ -10,10 +10,10 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 
 class MainActivity : Activity() {
-    private val upSignal = "4"
-    private val downSignal = "2"
-    private val leftSignal = "1"
-    private val rightSignal = "3"
+    private val upSignal = "F"
+    private val downSignal = "B"
+    private val leftSignal = "L"
+    private val rightSignal = "R"
     private val bluetoothModule = BluetoothModule
 
     var buttonUp: Button? = null

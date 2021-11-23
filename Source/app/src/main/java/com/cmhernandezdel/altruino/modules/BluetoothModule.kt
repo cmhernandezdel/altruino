@@ -46,7 +46,7 @@ object BluetoothModule {
         }
     }
 
-    private val bluetoothUUID = UUID.fromString("e568e2da-c7e1-4d84-8c35-fdd14307fbd1")
+    private val bluetoothUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
     private var bluetoothAdapter: BluetoothAdapter? = null
     private var bluetoothSocket: BluetoothSocket? = null
     var adapter: BluetoothDevicesListAdapter? = null
