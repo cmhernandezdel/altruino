@@ -8,9 +8,8 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.cmhernandezdel.altruino.exceptions.BluetoothNotAvailableException
-import dagger.hilt.android.qualifiers.ApplicationContext
 
-class BluetoothProvider(@ApplicationContext context: Context) : IBluetoothStatusProvider, IBluetoothConnectionProvider {
+class BluetoothProvider : IBluetoothStatusProvider, IBluetoothConnectionProvider {
     private val classTag = "BluetoothProvider.kt"
     private val bluetoothBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
@@ -24,7 +23,6 @@ class BluetoothProvider(@ApplicationContext context: Context) : IBluetoothStatus
                 }
             }
         }
-
     }
 
     override fun enableBluetooth() {
@@ -34,7 +32,9 @@ class BluetoothProvider(@ApplicationContext context: Context) : IBluetoothStatus
     }
 
     override fun disableBluetooth() {
-        TODO("Not yet implemented")
+        val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter() ?: throw BluetoothNotAvailableException("This device has no bluetooth adapter")
+        val isTurningOff = bluetoothAdapter.disable()
+        if (!isTurningOff) throw BluetoothNotAvailableException("Bluetooth could not turn off")
     }
 
     override fun isBluetoothEnabled(): Boolean {
