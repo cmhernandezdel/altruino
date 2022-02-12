@@ -6,11 +6,16 @@ import android.bluetooth.BluetoothSocket
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
+import android.content.IntentFilter
 import android.util.Log
 import com.cmhernandezdel.altruino.exceptions.BluetoothNotAvailableException
+import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.*
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class BluetoothProvider : IBluetoothStatusProvider, IBluetoothConnectionProvider {
+@Singleton
+class BluetoothProvider @Inject constructor(@ApplicationContext private val context: Context) : IBluetoothStatusProvider, IBluetoothConnectionProvider {
     private val classTag = "BluetoothProvider.kt"
     private val bluetoothUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
     private val bluetoothBroadcastReceiver = object : BroadcastReceiver() {
@@ -25,6 +30,15 @@ class BluetoothProvider : IBluetoothStatusProvider, IBluetoothConnectionProvider
                 }
             }
         }
+    }
+
+    init {
+        val filter = IntentFilter()
+        filter.addAction(BluetoothDevice.ACTION_FOUND)
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
+        filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
+        filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
+        context.registerReceiver(bluetoothBroadcastReceiver, filter)
     }
 
     override fun enableBluetooth() {
