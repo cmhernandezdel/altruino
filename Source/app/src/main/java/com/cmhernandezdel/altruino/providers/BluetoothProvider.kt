@@ -28,6 +28,22 @@ class BluetoothProvider @Inject constructor(@ApplicationContext private val cont
                         BluetoothAdapter.STATE_ON -> Log.i(classTag, "Bluetooth turned on")
                     }
                 }
+                BluetoothDevice.ACTION_FOUND -> {
+                    val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
+                    // TODO: what do we do with this device?
+                }
+                BluetoothAdapter.ACTION_DISCOVERY_STARTED -> {
+                    Log.i(classTag, "Discovery started")
+                }
+                BluetoothAdapter.ACTION_DISCOVERY_FINISHED -> {
+                    Log.i(classTag, "Discovery finished")
+                }
+                BluetoothDevice.ACTION_BOND_STATE_CHANGED -> {
+                    val newBondState = intent.getIntExtra(BluetoothDevice.ACTION_BOND_STATE_CHANGED, BluetoothDevice.BOND_NONE)
+                    if (newBondState == BluetoothDevice.BOND_BONDED) {
+                        Log.i(classTag, "Successfully bonded to device")
+                    }
+                }
             }
         }
     }
@@ -35,6 +51,7 @@ class BluetoothProvider @Inject constructor(@ApplicationContext private val cont
     init {
         val filter = IntentFilter()
         filter.addAction(BluetoothDevice.ACTION_FOUND)
+        filter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_STARTED)
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
