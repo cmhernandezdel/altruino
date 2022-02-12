@@ -8,9 +8,11 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.cmhernandezdel.altruino.exceptions.BluetoothNotAvailableException
+import java.util.*
 
 class BluetoothProvider : IBluetoothStatusProvider, IBluetoothConnectionProvider {
     private val classTag = "BluetoothProvider.kt"
+    private val bluetoothUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
     private val bluetoothBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
@@ -38,30 +40,41 @@ class BluetoothProvider : IBluetoothStatusProvider, IBluetoothConnectionProvider
     }
 
     override fun isBluetoothEnabled(): Boolean {
-        TODO("Not yet implemented")
+        val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter() ?: throw BluetoothNotAvailableException("This device has no bluetooth adapter")
+        return bluetoothAdapter.isEnabled
     }
 
     override fun isBluetoothAvailable(): Boolean {
-        TODO("Not yet implemented")
+        BluetoothAdapter.getDefaultAdapter() ?: return false
+        return true
     }
 
     override fun startBluetoothDiscovery() {
-        TODO("Not yet implemented")
+        val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter() ?: throw BluetoothNotAvailableException("This device has no bluetooth adapter")
+        bluetoothAdapter.startDiscovery()
     }
 
     override fun cancelBluetoothDiscovery() {
-        TODO("Not yet implemented")
+        val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter() ?: throw BluetoothNotAvailableException("This device has no bluetooth adapter")
+        if (bluetoothAdapter.isDiscovering) {
+            bluetoothAdapter.cancelDiscovery()
+        }
     }
 
     override fun getBondedDevices(): List<BluetoothDevice> {
-        TODO("Not yet implemented")
+        val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter() ?: throw BluetoothNotAvailableException("This device has no bluetooth adapter")
+        return bluetoothAdapter.bondedDevices.toList()
     }
 
     override fun connect(device: BluetoothDevice): BluetoothSocket {
-        TODO("Not yet implemented")
+        val bluetoothAdapter = BluetoothAdapter.getDefaultAdapter() ?: throw BluetoothNotAvailableException("This device has no bluetooth adapter")
+        bluetoothAdapter.cancelDiscovery()
+        val bluetoothSocket = device.createInsecureRfcommSocketToServiceRecord(bluetoothUUID)
+        bluetoothSocket?.connect()
+        return bluetoothSocket
     }
 
     override fun send(message: String, socket: BluetoothSocket) {
-        TODO("Not yet implemented")
+        socket.outputStream.write(message.encodeToByteArray())
     }
 }
