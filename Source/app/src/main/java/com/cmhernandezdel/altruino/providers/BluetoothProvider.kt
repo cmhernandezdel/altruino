@@ -8,7 +8,10 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.util.Log
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import com.cmhernandezdel.altruino.exceptions.BluetoothNotAvailableException
+import com.cmhernandezdel.altruino.models.enums.BluetoothStatus
 import dagger.hilt.android.qualifiers.ApplicationContext
 import java.util.*
 import javax.inject.Inject
@@ -18,19 +21,27 @@ import javax.inject.Singleton
 class BluetoothProvider @Inject constructor(@ApplicationContext private val context: Context) : IBluetoothStatusProvider, IBluetoothConnectionProvider {
     private val classTag = "BluetoothProvider.kt"
     private val bluetoothUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
+    private val foundDevices = arrayListOf<BluetoothDevice>()
+    private val bluetoothStatus = MutableLiveData(BluetoothStatus.UNAVAILABLE)
     private val bluetoothBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
                 BluetoothAdapter.ACTION_STATE_CHANGED -> {
                     val state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR)
                     when (state) {
-                        BluetoothAdapter.STATE_OFF -> Log.i(classTag, "Bluetooth turned off")
-                        BluetoothAdapter.STATE_ON -> Log.i(classTag, "Bluetooth turned on")
+                        BluetoothAdapter.STATE_OFF -> {
+                            Log.i(classTag, "Bluetooth turned off")
+                            bluetoothStatus.value = BluetoothStatus.DISABLED
+                        }
+                        BluetoothAdapter.STATE_ON -> {
+                            Log.i(classTag, "Bluetooth turned on")
+                            bluetoothStatus.value = BluetoothStatus.ENABLED
+                        }
                     }
                 }
                 BluetoothDevice.ACTION_FOUND -> {
-                    val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE)
-                    // TODO: what do we do with this device?
+                    val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE) ?: return
+                    foundDevices.add(device)
                 }
                 BluetoothAdapter.ACTION_DISCOVERY_STARTED -> {
                     Log.i(classTag, "Discovery started")
@@ -56,6 +67,16 @@ class BluetoothProvider @Inject constructor(@ApplicationContext private val cont
         filter.addAction(BluetoothAdapter.ACTION_DISCOVERY_FINISHED)
         filter.addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
         context.registerReceiver(bluetoothBroadcastReceiver, filter)
+
+        if (isBluetoothAvailable()) {
+            if (isBluetoothEnabled()) {
+                bluetoothStatus.value = BluetoothStatus.ENABLED
+            } else {
+                bluetoothStatus.value = BluetoothStatus.DISABLED
+            }
+        } else {
+            bluetoothStatus.value = BluetoothStatus.UNAVAILABLE
+        }
     }
 
     override fun enableBluetooth() {
@@ -78,6 +99,10 @@ class BluetoothProvider @Inject constructor(@ApplicationContext private val cont
     override fun isBluetoothAvailable(): Boolean {
         BluetoothAdapter.getDefaultAdapter() ?: return false
         return true
+    }
+
+    override fun getBluetoothStatusAsLiveData(): LiveData<BluetoothStatus> {
+        return bluetoothStatus
     }
 
     override fun startBluetoothDiscovery() {

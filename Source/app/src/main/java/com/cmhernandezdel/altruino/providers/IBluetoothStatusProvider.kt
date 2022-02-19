@@ -1,6 +1,8 @@
 package com.cmhernandezdel.altruino.providers
 
+import androidx.lifecycle.LiveData
 import com.cmhernandezdel.altruino.exceptions.BluetoothNotAvailableException
+import com.cmhernandezdel.altruino.models.enums.BluetoothStatus
 
 interface IBluetoothStatusProvider {
     /**
@@ -29,4 +31,10 @@ interface IBluetoothStatusProvider {
      * @return True if bluetooth is available, false otherwise.
      */
     fun isBluetoothAvailable(): Boolean
+
+    /**
+     * Returns the status of the bluetooth adapter as a live data.
+     * @return A live data containing the bluetooth status.
+     */
+    fun getBluetoothStatusAsLiveData(): LiveData<BluetoothStatus>
 }

@@ -16,7 +16,6 @@ import com.cmhernandezdel.altruino.modules.BluetoothModule
 
 class BluetoothStatusFragment : Fragment() {
     private val classTag = "BluetoothStatusFragment.kt"
-    private val bluetoothModule = BluetoothModule
     private var llBluetoothEnabled: LinearLayout? = null
     private var llBluetoothDisabled: LinearLayout? = null
 
