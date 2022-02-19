@@ -1,41 +1,50 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.BluetoothStatusFragment">
+<layout>
 
-    <LinearLayout
-        android:id="@+id/ll_disabled_bluetooth"
+    <data>
+        <variable
+            name="viewModel"
+            type="com.cmhernandezdel.altruino.viewmodels.BluetoothStatusViewModel" />
+    </data>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="visible">
+        tools:context=".fragments.BluetoothStatusFragment">
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/bluetooth_disabled_info" />
+        <LinearLayout
+            android:id="@+id/ll_disabled_bluetooth"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="@{!viewModel.isBluetoothEnabled}">
 
-        <Button
-            android:id="@+id/button_enable_bluetooth"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/bluetooth_enable_button" />
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bluetooth_disabled_info" />
 
-    </LinearLayout>
+            <Button
+                android:id="@+id/button_enable_bluetooth"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bluetooth_enable_button" />
 
-    <LinearLayout
-        android:id="@+id/ll_enabled_bluetooth"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:orientation="vertical"
-        android:visibility="gone">
+        </LinearLayout>
 
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/bluetooth_enabled_info" />
+        <LinearLayout
+            android:id="@+id/ll_enabled_bluetooth"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:visibility="@{viewModel.isBluetoothEnabled}">
 
-    </LinearLayout>
-</FrameLayout>
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/bluetooth_enabled_info" />
+
+        </LinearLayout>
+    </FrameLayout>
+</layout>

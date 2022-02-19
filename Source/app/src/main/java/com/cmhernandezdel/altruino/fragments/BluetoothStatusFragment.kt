@@ -11,38 +11,26 @@ import android.view.ViewGroup
 import android.widget.Button
 import android.widget.LinearLayout
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.viewModels
 import com.cmhernandezdel.altruino.R
 import com.cmhernandezdel.altruino.modules.BluetoothModule
+import com.cmhernandezdel.altruino.viewmodels.BluetoothStatusViewModel
+import dagger.hilt.android.AndroidEntryPoint
 
-class BluetoothStatusFragment : Fragment() {
+@AndroidEntryPoint
+class BluetoothStatusFragment : Fragment(R.layout.fragment_bluetooth_status) {
     private val classTag = "BluetoothStatusFragment.kt"
-    private var llBluetoothEnabled: LinearLayout? = null
-    private var llBluetoothDisabled: LinearLayout? = null
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(R.layout.fragment_bluetooth_status, container, false)
-    }
+    private val mViewModel: BluetoothStatusViewModel by viewModels()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        llBluetoothEnabled = view.findViewById(R.id.ll_enabled_bluetooth)
-        llBluetoothDisabled = view.findViewById(R.id.ll_disabled_bluetooth)
+        // TODO bluetooth permission
 
-        val buttonEnableBluetooth = view.findViewById<Button>(R.id.button_enable_bluetooth)
-        buttonEnableBluetooth?.setOnClickListener { onEnableBluetoothButtonClick() }
-
-        if (isBluetoothPermissionGranted() && bluetoothModule.isBluetoothEnabled()) {
-            loadBluetoothEnabledUI()
-        } else if (!isBluetoothPermissionGranted()) {
-            requestPermissions(
-                arrayOf(
-                    Manifest.permission.BLUETOOTH,
-                    Manifest.permission.BLUETOOTH_ADMIN
-                ), 12597
-            )
-        } else {
-            loadBluetoothDisabledUI()
+        val binding = BluetoothStatusFragmentBinding.bind(view)
+        binding.apply {
+            viewModel = mViewModel
+            lifecycleOwner = viewLifecycleOwner
         }
     }
 
