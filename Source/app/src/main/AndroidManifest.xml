@@ -17,6 +17,7 @@
         android:name=".hilt.application.AltruinoApplication">
         <activity
             android:name=".activities.SplashScreenActivity"
+            android:exported="true"
             android:theme="@style/Theme.Splash">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
