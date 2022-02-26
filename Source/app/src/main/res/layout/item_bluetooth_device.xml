@@ -1,17 +1,29 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<layout>
 
-    <TextView
-        android:id="@+id/bluetooth_device_item_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <data>
 
-    <TextView
-        android:id="@+id/bluetooth_device_item_address"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+        <variable
+            name="viewModel"
+            type="com.cmhernandezdel.altruino.viewmodels.BluetoothDeviceViewModel" />
+    </data>
 
-</LinearLayout>
+    <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/bluetooth_device_item_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.name}" />
+
+        <TextView
+            android:id="@+id/bluetooth_device_item_address"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@{viewModel.address}" />
+
+    </LinearLayout>
+</layout>
