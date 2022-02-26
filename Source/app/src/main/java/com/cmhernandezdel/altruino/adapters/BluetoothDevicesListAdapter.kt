@@ -1,24 +1,31 @@
 package com.cmhernandezdel.altruino.adapters
 
-import android.bluetooth.BluetoothDevice
-import android.content.Context
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ArrayAdapter
-import android.widget.TextView
+import androidx.databinding.DataBindingUtil
+import androidx.databinding.ViewDataBinding
+import androidx.recyclerview.widget.RecyclerView
 import com.cmhernandezdel.altruino.R
+import com.cmhernandezdel.altruino.viewmodels.BluetoothDeviceViewModel
 
-class BluetoothDevicesListAdapter(context: Context, devices: ArrayList<BluetoothDevice>) : ArrayAdapter<BluetoothDevice>(context, 0, devices) {
-    override fun getView(position: Int, convertView: View?, parent: ViewGroup): View {
-        val device = getItem(position)
-        val retView = convertView ?: LayoutInflater.from(context).inflate(R.layout.item_bluetooth_device, parent, false)
-        device?.let {
-            val textViewName = retView.findViewById<TextView>(R.id.bluetooth_device_item_name)
-            val textViewAddress = retView.findViewById<TextView>(R.id.bluetooth_device_item_address)
-            textViewName.text = device.name ?: "Unknown device"
-            textViewAddress.text = device.address
-        }
-        return retView
+class BluetoothDevicesListAdapter: RecyclerView.Adapter<BluetoothDeviceViewHolder>() {
+    var bluetoothViewModels : List<BluetoothDeviceViewModel> = emptyList()
+
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BluetoothDeviceViewHolder {
+        val binding : ViewDataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_bluetooth_device, parent, false)
+        return BluetoothDeviceViewHolder(binding)
+    }
+
+    override fun getItemCount(): Int {
+        return bluetoothViewModels.size
+    }
+
+    override fun onBindViewHolder(holder: BluetoothDeviceViewHolder, position: Int) {
+        holder.bind(bluetoothViewModels[position])
+    }
+
+    fun updateItems(items: List<BluetoothDeviceViewModel>?){
+        bluetoothViewModels = items ?: emptyList()
+        notifyDataSetChanged()
     }
 }
