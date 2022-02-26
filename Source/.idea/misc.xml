@@ -4,6 +4,7 @@
     <option name="filePathToZoomLevelMap">
       <map>
         <entry key="..\:/Users/cmhernandezdel/Projects/altruino/Source/app/src/main/res/layout/fragment_bluetooth_status.xml" value="0.3071253071253071" />
+        <entry key="..\:/Users/cmhernandezdel/Projects/altruino/Source/app/src/main/res/layout/fragment_bonded_devices.xml" value="0.13020833333333334" />
         <entry key="..\:/Users/cmhernandezdel/Projects/altruino/Source/app/src/main/res/layout/item_bluetooth_device.xml" value="0.13020833333333334" />
       </map>
     </option>

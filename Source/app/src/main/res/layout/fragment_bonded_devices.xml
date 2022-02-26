@@ -1,13 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    tools:context=".fragments.BondedDevicesFragment">
+<layout>
 
-    <ListView
-        android:id="@+id/lv_bonded_devices"
+    <data>
+
+        <variable
+            name="viewModel"
+            type="com.cmhernandezdel.altruino.viewmodels.BondedDevicesListViewModel" />
+    </data>
+
+    <FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
+        android:layout_height="match_parent"
+        tools:context=".fragments.BondedDevicesFragment">
 
-</FrameLayout>
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/lv_bonded_devices"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:itemViewModels="@{viewModel.bondedDevices}" />
+
+    </FrameLayout>
+</layout>
