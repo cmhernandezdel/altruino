@@ -1,4 +1,4 @@
-package com.cmhernandezdel.altruino.fragments
+package com.cmhernandezdel.altruino.activities.device_list.fragments
 
 import android.os.Bundle
 import android.util.Log

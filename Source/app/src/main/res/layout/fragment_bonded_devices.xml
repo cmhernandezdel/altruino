@@ -13,7 +13,7 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        tools:context=".fragments.BondedDevicesFragment">
+        tools:context=".activities.device_list.fragments.BondedDevicesFragment">
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/lv_bonded_devices"

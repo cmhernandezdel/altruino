@@ -1,4 +1,4 @@
-package com.cmhernandezdel.altruino.activities
+package com.cmhernandezdel.altruino.activities.device_list
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -7,6 +7,7 @@ import android.widget.AdapterView
 import android.widget.TextView
 import androidx.viewpager2.widget.ViewPager2
 import com.cmhernandezdel.altruino.R
+import com.cmhernandezdel.altruino.activities.main.MainActivity
 import com.cmhernandezdel.altruino.adapters.DeviceListActivityPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator

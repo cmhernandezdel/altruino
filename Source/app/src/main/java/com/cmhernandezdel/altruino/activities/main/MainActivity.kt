@@ -1,4 +1,4 @@
-package com.cmhernandezdel.altruino.activities
+package com.cmhernandezdel.altruino.activities.main
 
 import android.annotation.SuppressLint
 import android.app.Activity

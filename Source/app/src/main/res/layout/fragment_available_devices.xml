@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".fragments.AvailableDevicesFragment">
+    tools:context=".activities.device_list.fragments.AvailableDevicesFragment">
 
     <ListView
         android:id="@+id/lv_available_devices"

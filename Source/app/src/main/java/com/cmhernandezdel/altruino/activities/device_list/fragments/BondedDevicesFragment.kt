@@ -1,4 +1,4 @@
-package com.cmhernandezdel.altruino.fragments
+package com.cmhernandezdel.altruino.activities.device_list.fragments
 
 import android.content.Intent
 import android.os.Bundle
@@ -9,7 +9,7 @@ import android.view.ViewGroup
 import android.widget.AdapterView
 import android.widget.ListView
 import com.cmhernandezdel.altruino.R
-import com.cmhernandezdel.altruino.activities.MainActivity
+import com.cmhernandezdel.altruino.activities.main.MainActivity
 import com.cmhernandezdel.altruino.adapters.BluetoothDevicesListAdapter
 import com.cmhernandezdel.altruino.modules.BluetoothModule
 import kotlinx.coroutines.CoroutineScope

@@ -1,4 +1,4 @@
-package com.cmhernandezdel.altruino.activities
+package com.cmhernandezdel.altruino.activities.splash_screen
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import com.cmhernandezdel.altruino.R
+import com.cmhernandezdel.altruino.activities.device_list.DeviceListActivity
 
 class SplashScreenActivity : AppCompatActivity() {
     private val handler = Handler(Looper.getMainLooper())

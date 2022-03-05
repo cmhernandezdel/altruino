@@ -18,7 +18,7 @@
         android:theme="@style/Theme.Altruino"
         android:name=".hilt.application.AltruinoApplication">
         <activity
-            android:name=".activities.SplashScreenActivity"
+            android:name=".activities.splash_screen.SplashScreenActivity"
             android:exported="true"
             android:theme="@style/Theme.Splash">
             <intent-filter>
@@ -26,8 +26,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".activities.DeviceListActivity" />
-        <activity android:name=".activities.MainActivity" />
+        <activity android:name=".activities.device_list.DeviceListActivity" />
+        <activity android:name=".activities.main.MainActivity" />
     </application>
 
 </manifest>
