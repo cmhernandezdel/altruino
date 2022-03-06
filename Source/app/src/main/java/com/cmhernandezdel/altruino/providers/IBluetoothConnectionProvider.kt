@@ -6,6 +6,7 @@ import com.cmhernandezdel.altruino.exceptions.BluetoothConnectionException
 import com.cmhernandezdel.altruino.exceptions.BluetoothNotAvailableException
 import com.cmhernandezdel.altruino.exceptions.BluetoothNotEnabledException
 import com.cmhernandezdel.altruino.exceptions.BluetoothSocketException
+import kotlinx.coroutines.flow.Flow
 
 interface IBluetoothConnectionProvider {
     /**
@@ -38,6 +39,12 @@ interface IBluetoothConnectionProvider {
      */
     @Throws(BluetoothNotAvailableException::class, BluetoothNotEnabledException::class)
     fun getBondedDevices(): List<BluetoothDevice>
+
+    /**
+     * Returns the available devices as a Flow.
+     * @return The flow of bluetooth devices.
+     */
+    fun getAvailableDevicesAsFlow(): Flow<BluetoothDevice>
 
     /**
      * Connects to a device and returns the socket where the communication will happen.

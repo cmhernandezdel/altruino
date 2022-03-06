@@ -11,7 +11,9 @@ import android.widget.ListView
 import com.cmhernandezdel.altruino.R
 import com.cmhernandezdel.altruino.adapters.BluetoothDevicesListAdapter
 import com.cmhernandezdel.altruino.modules.BluetoothModule
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class AvailableDevicesFragment : Fragment() {
     private val classTag = "AvailableDevicesFragment.kt"
     private val bluetoothModule = BluetoothModule

@@ -13,6 +13,12 @@ import androidx.lifecycle.MutableLiveData
 import com.cmhernandezdel.altruino.exceptions.BluetoothNotAvailableException
 import com.cmhernandezdel.altruino.models.enums.BluetoothStatus
 import dagger.hilt.android.qualifiers.ApplicationContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.emptyFlow
+import kotlinx.coroutines.launch
 import java.util.*
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -21,8 +27,9 @@ import javax.inject.Singleton
 class BluetoothProvider @Inject constructor(@ApplicationContext private val context: Context) : IBluetoothStatusProvider, IBluetoothConnectionProvider {
     private val classTag = "BluetoothProvider.kt"
     private val bluetoothUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
-    private val foundDevices = arrayListOf<BluetoothDevice>()
+    private val foundDevices = MutableSharedFlow<BluetoothDevice>()
     private val bluetoothStatus = MutableLiveData(BluetoothStatus.UNAVAILABLE)
+    private val scope = CoroutineScope(Dispatchers.Main)
     private val bluetoothBroadcastReceiver = object : BroadcastReceiver() {
         override fun onReceive(context: Context?, intent: Intent?) {
             when (intent?.action) {
@@ -40,8 +47,10 @@ class BluetoothProvider @Inject constructor(@ApplicationContext private val cont
                     }
                 }
                 BluetoothDevice.ACTION_FOUND -> {
-                    val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE) ?: return
-                    foundDevices.add(device)
+                    scope.launch {
+                        val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE) ?: return@launch
+                        foundDevices.emit(device)
+                    }
                 }
                 BluetoothAdapter.ACTION_DISCOVERY_STARTED -> {
                     Log.i(classTag, "Discovery started")
@@ -132,5 +141,9 @@ class BluetoothProvider @Inject constructor(@ApplicationContext private val cont
 
     override fun send(message: String, socket: BluetoothSocket) {
         socket.outputStream.write(message.encodeToByteArray())
+    }
+
+    override fun getAvailableDevicesAsFlow(): Flow<BluetoothDevice> {
+        return foundDevices
     }
 }
