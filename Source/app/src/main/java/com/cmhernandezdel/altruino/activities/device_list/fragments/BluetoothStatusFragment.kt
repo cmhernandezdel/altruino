@@ -48,11 +48,12 @@ class BluetoothStatusFragment : Fragment(R.layout.fragment_bluetooth_status) {
             }
         }
 
+        /*
         val binding = BluetoothStatusFragmentBinding.bind(view)
         binding.apply {
             viewModel = mViewModel
             lifecycleOwner = viewLifecycleOwner
-        }
+        }*/
     }
 
     private fun showRationaleDialogForBluetoothPermission() {
