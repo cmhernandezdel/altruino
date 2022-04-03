@@ -10,6 +10,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.viewModels
 import com.cmhernandezdel.altruino.R
+import com.cmhernandezdel.altruino.databinding.FragmentBluetoothStatusBinding
 import com.cmhernandezdel.altruino.viewmodels.BluetoothStatusViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -48,12 +49,11 @@ class BluetoothStatusFragment : Fragment(R.layout.fragment_bluetooth_status) {
             }
         }
 
-        /*
-        val binding = BluetoothStatusFragmentBinding.bind(view)
+        val binding = FragmentBluetoothStatusBinding.bind(view)
         binding.apply {
             viewModel = mViewModel
             lifecycleOwner = viewLifecycleOwner
-        }*/
+        }
     }
 
     private fun showRationaleDialogForBluetoothPermission() {

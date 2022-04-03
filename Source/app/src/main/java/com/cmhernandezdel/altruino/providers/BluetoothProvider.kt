@@ -79,11 +79,14 @@ class BluetoothProvider @Inject constructor(@ApplicationContext private val cont
 
         if (isBluetoothAvailable()) {
             if (isBluetoothEnabled()) {
+                Log.d(classTag, "Init; bluetooth status: enabled")
                 bluetoothStatus.value = BluetoothStatus.ENABLED
             } else {
+                Log.d(classTag, "Init; bluetooth status: disabled")
                 bluetoothStatus.value = BluetoothStatus.DISABLED
             }
         } else {
+            Log.d(classTag, "Init; bluetooth status: unavailable")
             bluetoothStatus.value = BluetoothStatus.UNAVAILABLE
         }
     }

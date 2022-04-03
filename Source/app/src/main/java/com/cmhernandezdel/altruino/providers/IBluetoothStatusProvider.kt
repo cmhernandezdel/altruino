@@ -1,10 +1,8 @@
 package com.cmhernandezdel.altruino.providers
 
-import android.bluetooth.BluetoothDevice
 import androidx.lifecycle.LiveData
 import com.cmhernandezdel.altruino.exceptions.BluetoothNotAvailableException
 import com.cmhernandezdel.altruino.models.enums.BluetoothStatus
-import kotlinx.coroutines.flow.Flow
 
 interface IBluetoothStatusProvider {
     /**

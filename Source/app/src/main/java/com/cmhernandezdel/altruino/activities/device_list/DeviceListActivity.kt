@@ -11,10 +11,12 @@ import com.cmhernandezdel.altruino.activities.main.MainActivity
 import com.cmhernandezdel.altruino.adapters.DeviceListActivityPagerAdapter
 import com.google.android.material.tabs.TabLayout
 import com.google.android.material.tabs.TabLayoutMediator
+import dagger.hilt.android.AndroidEntryPoint
 
 // to pair: 1234
 // 9600 bps
 // 1 left 4 up 3 right 2 down
+@AndroidEntryPoint
 class DeviceListActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
