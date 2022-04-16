@@ -26,9 +26,9 @@ class DeviceListActivity : AppCompatActivity() {
 
     private val classTag = "DeviceListActivity.kt"
 
-    private val permissionsLauncher = registerForActivityResult(ActivityResultContracts.RequestPermission()) { isGranted ->
-        if (isGranted) {
-            Log.d(classTag, "Permission granted")
+    private val permissionsLauncher = registerForActivityResult(ActivityResultContracts.RequestMultiplePermissions()) { permissions ->
+        for (perm in permissions.keys) {
+            Log.i(classTag, "Granted: ${perm}")
         }
     }
 
@@ -48,23 +48,29 @@ class DeviceListActivity : AppCompatActivity() {
             }
         }.attach()
 
-
         val bluetoothAdminPermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_ADMIN) == PackageManager.PERMISSION_GRANTED
         val bluetoothPermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH) == PackageManager.PERMISSION_GRANTED
         val locationPermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        val fineLocationPermissionGranted = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
+        val permissions = arrayListOf<String>()
 
         if (!bluetoothAdminPermissionGranted) {
-            permissionsLauncher.launch(Manifest.permission.BLUETOOTH_ADMIN)
+            permissions.add(Manifest.permission.BLUETOOTH_ADMIN)
         }
 
         if (!bluetoothPermissionGranted) {
-            permissionsLauncher.launch(Manifest.permission.BLUETOOTH)
+            permissions.add(Manifest.permission.BLUETOOTH)
         }
 
         if (!locationPermissionGranted) {
-            permissionsLauncher.launch(Manifest.permission.ACCESS_COARSE_LOCATION)
+            permissions.add(Manifest.permission.ACCESS_COARSE_LOCATION)
         }
 
+        if (!fineLocationPermissionGranted) {
+            permissions.add(Manifest.permission.ACCESS_FINE_LOCATION)
+        }
+
+        permissionsLauncher.launch(permissions.toTypedArray())
     }
 
     private val onDeviceClicked = AdapterView.OnItemClickListener { _, view, _, _ ->
