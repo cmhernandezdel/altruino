@@ -17,6 +17,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableSharedFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.emptyFlow
 import kotlinx.coroutines.launch
 import java.util.*
@@ -27,7 +28,7 @@ import javax.inject.Singleton
 class BluetoothProvider @Inject constructor(@ApplicationContext private val context: Context) : IBluetoothStatusProvider, IBluetoothConnectionProvider {
     private val classTag = "BluetoothProvider.kt"
     private val bluetoothUUID = UUID.fromString("00001101-0000-1000-8000-00805F9B34FB")
-    private val foundDevices = MutableSharedFlow<BluetoothDevice>()
+    private val foundDevices = MutableSharedFlow<BluetoothDevice>(replay = 10)
     private val bluetoothStatus = MutableLiveData(BluetoothStatus.UNAVAILABLE)
     private val scope = CoroutineScope(Dispatchers.Main)
     private val bluetoothBroadcastReceiver = object : BroadcastReceiver() {
@@ -49,6 +50,7 @@ class BluetoothProvider @Inject constructor(@ApplicationContext private val cont
                 BluetoothDevice.ACTION_FOUND -> {
                     scope.launch {
                         val device = intent.getParcelableExtra<BluetoothDevice>(BluetoothDevice.EXTRA_DEVICE) ?: return@launch
+                        Log.d(classTag, "Emitting value ${device.address}")
                         foundDevices.emit(device)
                     }
                 }
@@ -69,6 +71,7 @@ class BluetoothProvider @Inject constructor(@ApplicationContext private val cont
     }
 
     init {
+        Log.i(classTag, "Init")
         val filter = IntentFilter()
         filter.addAction(BluetoothDevice.ACTION_FOUND)
         filter.addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
@@ -146,7 +149,7 @@ class BluetoothProvider @Inject constructor(@ApplicationContext private val cont
         socket.outputStream.write(message.encodeToByteArray())
     }
 
-    override fun getAvailableDevicesAsFlow(): Flow<BluetoothDevice> {
+    override fun getAvailableDevicesAsFlow(): SharedFlow<BluetoothDevice> {
         return foundDevices
     }
 }

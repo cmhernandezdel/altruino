@@ -1,5 +1,6 @@
 package com.cmhernandezdel.altruino.adapters
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.databinding.DataBindingUtil
@@ -8,11 +9,12 @@ import androidx.recyclerview.widget.RecyclerView
 import com.cmhernandezdel.altruino.R
 import com.cmhernandezdel.altruino.viewmodels.BluetoothDeviceViewModel
 
-class BluetoothDevicesListAdapter: RecyclerView.Adapter<BluetoothDeviceViewHolder>() {
-    var bluetoothViewModels : List<BluetoothDeviceViewModel> = emptyList()
+class BluetoothDevicesListAdapter : RecyclerView.Adapter<BluetoothDeviceViewHolder>() {
+    private val classTag = "BluetoothDevicesListAdapter.kt"
+    var bluetoothViewModels: List<BluetoothDeviceViewModel> = emptyList()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): BluetoothDeviceViewHolder {
-        val binding : ViewDataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_bluetooth_device, parent, false)
+        val binding: ViewDataBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.item_bluetooth_device, parent, false)
         return BluetoothDeviceViewHolder(binding)
     }
 
@@ -24,7 +26,8 @@ class BluetoothDevicesListAdapter: RecyclerView.Adapter<BluetoothDeviceViewHolde
         holder.bind(bluetoothViewModels[position])
     }
 
-    fun updateItems(items: List<BluetoothDeviceViewModel>?){
+    fun updateItems(items: List<BluetoothDeviceViewModel>?) {
+        Log.d(classTag, "Update items: ${items?.size}")
         bluetoothViewModels = items ?: emptyList()
         notifyDataSetChanged()
     }

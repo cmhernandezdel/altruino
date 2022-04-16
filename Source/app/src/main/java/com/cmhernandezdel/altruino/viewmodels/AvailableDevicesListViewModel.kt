@@ -1,6 +1,7 @@
 package com.cmhernandezdel.altruino.viewmodels
 
 import android.bluetooth.BluetoothDevice
+import android.util.Log
 import androidx.lifecycle.*
 import com.cmhernandezdel.altruino.providers.IBluetoothConnectionProvider
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -13,28 +14,29 @@ import javax.inject.Inject
 @HiltViewModel
 class AvailableDevicesListViewModel @Inject constructor(private val bluetoothConnectionProvider: IBluetoothConnectionProvider) : ViewModel() {
 
-    private val availableDevicesFlow: Flow<BluetoothDeviceViewModel>
+    private val classTag = "AvailableDevicesListViewModel.kt"
     private val _devices = MutableLiveData<ArrayList<BluetoothDeviceViewModel>>(arrayListOf())
     val devices: LiveData<ArrayList<BluetoothDeviceViewModel>> by this::_devices
 
     init {
-        startBluetoothDiscovery()
-        val viewModelFlow = bluetoothConnectionProvider.getAvailableDevicesAsFlow().transform<BluetoothDevice, BluetoothDeviceViewModel> {
-            BluetoothDeviceViewModel(it)
+        viewModelScope.launch {
+            startBluetoothDiscovery()
+            bluetoothConnectionProvider.getAvailableDevicesAsFlow().collect {
+                val currentList = _devices.value
+                val vm = BluetoothDeviceViewModel(it)
+                if(currentList != null) {
+                    currentList.add(vm)
+                    _devices.postValue(currentList!!)
+                }
+                else{
+                    _devices.postValue(arrayListOf(vm))
+                }
+            }
         }
-        availableDevicesFlow = viewModelFlow
     }
 
     private fun startBluetoothDiscovery() = viewModelScope.launch {
+        Log.d(classTag, "Starting bluetooth discovery")
         bluetoothConnectionProvider.startBluetoothDiscovery()
-        availableDevicesFlow.collect {
-            if (_devices.value != null) {
-                val list = _devices.value!!
-                list.add(it)
-                _devices.postValue(list)
-            } else {
-                _devices.postValue(arrayListOf(it))
-            }
-        }
     }
 }
