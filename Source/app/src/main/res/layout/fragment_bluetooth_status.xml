@@ -23,12 +23,17 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:textSize="36sp"
+                android:layout_marginTop="36dp"
+                android:layout_gravity="center"
                 android:text="@string/bluetooth_disabled_info" />
 
             <Button
                 android:id="@+id/button_enable_bluetooth"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="36dp"
+                android:layout_gravity="center"
                 android:onClick="@{() -> viewModel.enableBluetooth()}"
                 android:text="@string/bluetooth_enable_button" />
 
@@ -43,6 +48,9 @@
 
             <TextView
                 android:layout_width="wrap_content"
+                android:textSize="18sp"
+                android:layout_gravity="center"
+                android:layout_marginTop="72dp"
                 android:layout_height="wrap_content"
                 android:text="@string/bluetooth_enabled_info" />
 
